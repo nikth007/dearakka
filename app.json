@@ -25,7 +25,7 @@
     "platforms": ["ios", "android", "web"],
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/favicon.png",
       "name": "Dear Akka",
       "shortName": "Dear Akka",
