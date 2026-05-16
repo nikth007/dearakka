@@ -14,3 +14,4 @@ yarn-error.*
 .DS_Store
 *.pem
 .env
+.netlify/

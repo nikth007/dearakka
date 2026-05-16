@@ -43,9 +43,6 @@
         }
       ]
     ],
-    "experiments": {
-      "baseUrl": "/dearakka"
-    },
     "extra": {
       "eas": {
         "projectId": "dear-akka-smf"
