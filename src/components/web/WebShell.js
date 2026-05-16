@@ -1,64 +1,63 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, ScrollView } from 'react-native';
 import { Colors, Typography } from '../../theme';
 
-// Only wraps on web — on native, renders children directly
 export default function WebShell({ children }) {
   if (Platform.OS !== 'web') return children;
 
   return (
-    <View style={styles.backdrop}>
-      {/* Left brand panel */}
-      <View style={styles.brandPanel}>
-        <Text style={styles.brandEmoji}>👩‍⚕️</Text>
-        <Text style={styles.brandTitle}>Dear Akka</Text>
-        <Text style={styles.brandTagline}>Your personal women's{'\n'}health companion</Text>
-        <View style={styles.brandDivider} />
-        <Text style={styles.brandBy}>By Sundaram Medical Foundation</Text>
+    <View style={styles.root}>
+      {/* Top nav bar */}
+      <View style={styles.navbar}>
+        <Text style={styles.navLogo}>👩‍⚕️ Dear Akka</Text>
+        <Text style={styles.navBy}>by Sundaram Medical Foundation</Text>
+      </View>
 
-        <View style={styles.featureList}>
+      {/* Main content */}
+      <View style={styles.body}>
+        {/* Left brand sidebar */}
+        <View style={styles.sidebar}>
+          <Text style={styles.sideTitle}>Your personal{'\n'}women's health{'\n'}companion</Text>
+          <View style={styles.divider} />
           {FEATURES.map((f, i) => (
-            <View key={i} style={styles.featureItem}>
-              <Text style={styles.featureDot}>●</Text>
+            <View key={i} style={styles.featureRow}>
+              <Text style={styles.featureDot}>✦</Text>
               <Text style={styles.featureText}>{f}</Text>
             </View>
           ))}
+          <View style={styles.privacyBox}>
+            <Text style={styles.privacyText}>🔒 All data stays on your device. Nothing is shared externally.</Text>
+          </View>
         </View>
 
-        <View style={styles.privacyRow}>
-          <Text style={styles.privacyIcon}>🔒</Text>
-          <Text style={styles.privacyText}>All data stored locally.{'\n'}Nothing shared externally.</Text>
+        {/* Phone frame */}
+        <View style={styles.phoneOuter}>
+          <View style={styles.phoneFrame}>
+            <View style={styles.phoneBrow}>
+              <View style={styles.phoneSpeaker} />
+            </View>
+            <View style={styles.phoneScreen}>
+              {children}
+            </View>
+            <View style={styles.phoneChrome} />
+          </View>
+        </View>
+
+        {/* Right info sidebar */}
+        <View style={styles.sidebar}>
+          {INFO.map((card, i) => (
+            <View key={i} style={styles.infoCard}>
+              <Text style={styles.infoEmoji}>{card.emoji}</Text>
+              <Text style={styles.infoTitle}>{card.title}</Text>
+              <Text style={styles.infoText}>{card.text}</Text>
+            </View>
+          ))}
         </View>
       </View>
 
-      {/* Phone frame */}
-      <View style={styles.phoneFrame}>
-        <View style={styles.phoneBrow}>
-          <View style={styles.phoneSpeaker} />
-        </View>
-        <View style={styles.phoneScreen}>
-          {children}
-        </View>
-        <View style={styles.phoneHome} />
-      </View>
-
-      {/* Right info panel */}
-      <View style={styles.infoPanel}>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoEmoji}>📱</Text>
-          <Text style={styles.infoTitle}>Also on mobile</Text>
-          <Text style={styles.infoText}>Download the Dear Akka app on Android or iOS for the full experience with push reminders.</Text>
-        </View>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoEmoji}>🤙</Text>
-          <Text style={styles.infoTitle}>WhatsApp Akka</Text>
-          <Text style={styles.infoText}>Chat with Dear Akka on WhatsApp at{'\n'}044 3569 3070</Text>
-        </View>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoEmoji}>🏥</Text>
-          <Text style={styles.infoTitle}>SMF Helpline</Text>
-          <Text style={styles.infoText}>044 3569 3070{'\n'}Free screenings & consultations</Text>
-        </View>
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>© Sundaram Medical Foundation · SMF Helpline: 044 3569 3070</Text>
       </View>
     </View>
   );
@@ -66,93 +65,131 @@ export default function WebShell({ children }) {
 
 const FEATURES = [
   '7 women\'s health conditions explained',
-  'Track cycle, mood & symptoms daily',
+  'Cycle, mood & symptom tracking',
   'Card-based self-assessments',
   'Breast self-examination guide',
   'Health myths busted',
-  'SMF clinic & helpline info',
+  'SMF clinic & emergency info',
+];
+
+const INFO = [
+  { emoji: '📱', title: 'Also on mobile', text: 'Install Dear Akka on Android or iOS for push reminders and offline access.' },
+  { emoji: '💬', title: 'WhatsApp Akka', text: 'Chat with Dear Akka on WhatsApp at 044 3569 3070' },
+  { emoji: '🏥', title: 'SMF Helpline', text: '044 3569 3070\nFree screenings & consultations' },
 ];
 
 const styles = StyleSheet.create({
-  backdrop: {
+  root: {
+    flex: 1,
+    backgroundColor: '#F0FDF9',
+  },
+  navbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 32,
+    paddingVertical: 14,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2F8F4',
+  },
+  navLogo: { fontSize: 18, fontWeight: '800', color: Colors.teal },
+  navBy: { fontSize: 12, color: Colors.textSecondary },
+
+  body: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F0FDF9',
-    gap: 48,
-    padding: 40,
-    minHeight: '100vh',
+    paddingHorizontal: 40,
+    paddingVertical: 32,
   },
-  brandPanel: {
-    width: 260,
-    gap: 12,
-    alignItems: 'flex-start',
-  },
-  brandEmoji: { fontSize: 52 },
-  brandTitle: { fontSize: 28, fontWeight: '800', color: Colors.teal },
-  brandTagline: { ...Typography.bodyMd, color: Colors.textPrimary, lineHeight: 22 },
-  brandDivider: { width: 40, height: 3, backgroundColor: Colors.teal, borderRadius: 2, marginVertical: 4 },
-  brandBy: { ...Typography.caption, color: Colors.textSecondary },
-  featureList: { marginTop: 8, gap: 8 },
-  featureItem: { flexDirection: 'row', alignItems: 'flex-start', gap: 8 },
-  featureDot: { color: Colors.teal, fontSize: 8, marginTop: 5 },
-  featureText: { ...Typography.caption, color: Colors.textPrimary, flex: 1, lineHeight: 18 },
-  privacyRow: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 8,
-    backgroundColor: Colors.tealLight, borderRadius: 10, padding: 10, marginTop: 8,
-  },
-  privacyIcon: { fontSize: 14 },
-  privacyText: { ...Typography.tiny, color: Colors.tealDark, flex: 1, lineHeight: 16 },
 
+  sidebar: {
+    width: 220,
+    paddingHorizontal: 16,
+    gap: 12,
+  },
+  sideTitle: { fontSize: 20, fontWeight: '700', color: Colors.teal, lineHeight: 28 },
+  divider: { height: 2, backgroundColor: Colors.tealLight, width: 40, borderRadius: 2 },
+  featureRow: { flexDirection: 'row', gap: 8, alignItems: 'flex-start' },
+  featureDot: { color: Colors.teal, fontSize: 10, marginTop: 2 },
+  featureText: { fontSize: 13, color: Colors.textPrimary, flex: 1, lineHeight: 18 },
+  privacyBox: {
+    backgroundColor: Colors.tealLight,
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 4,
+  },
+  privacyText: { fontSize: 12, color: Colors.tealDark, lineHeight: 17 },
+
+  phoneOuter: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
   phoneFrame: {
-    width: 390,
-    height: 760,
-    backgroundColor: '#1a1a1a',
-    borderRadius: 50,
-    padding: 12,
+    width: 375,
+    height: 750,
+    backgroundColor: '#1C1C1E',
+    borderRadius: 48,
+    padding: 10,
+    alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 24 },
-    shadowOpacity: 0.35,
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.4,
     shadowRadius: 40,
     elevation: 30,
-    alignItems: 'center',
   },
   phoneBrow: {
-    width: '100%', height: 28,
-    alignItems: 'center', justifyContent: 'center',
+    width: 355,
+    height: 26,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   phoneSpeaker: {
-    width: 80, height: 5, borderRadius: 3, backgroundColor: '#444',
+    width: 70,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3A3A3C',
   },
   phoneScreen: {
     flex: 1,
-    width: '100%',
+    width: 355,
     borderRadius: 38,
     overflow: 'hidden',
     backgroundColor: '#FFF0F5',
   },
-  phoneHome: {
-    width: 120, height: 5, borderRadius: 3, backgroundColor: '#444', marginTop: 10,
+  phoneChrome: {
+    width: 100,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#3A3A3C',
+    marginTop: 8,
   },
 
-  infoPanel: {
-    width: 220,
-    gap: 16,
-    alignItems: 'flex-start',
-  },
   infoCard: {
     backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 16,
-    gap: 6,
-    width: '100%',
+    borderRadius: 14,
+    padding: 14,
+    gap: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
-    shadowRadius: 8,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  infoEmoji: { fontSize: 24 },
-  infoTitle: { ...Typography.label, color: Colors.textPrimary },
-  infoText: { ...Typography.caption, color: Colors.textSecondary, lineHeight: 18 },
+  infoEmoji: { fontSize: 22 },
+  infoTitle: { fontSize: 13, fontWeight: '700', color: Colors.textPrimary },
+  infoText: { fontSize: 12, color: Colors.textSecondary, lineHeight: 17 },
+
+  footer: {
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: '#E2F8F4',
+    alignItems: 'center',
+  },
+  footerText: { fontSize: 12, color: Colors.textMuted },
 });
