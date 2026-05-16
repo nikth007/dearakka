@@ -9,17 +9,33 @@ import { saveProfile, setOnboarded, saveCycleData } from '../../utils/storage';
 import { computeCycleInfo } from '../../utils/cycleCalc';
 import { t } from '../../data/strings';
 
+const IS_WEB = Platform.OS === 'web';
+
 export default function ProfileSetupScreen({ route }) {
   const lang = route.params?.lang || 'en';
   const { dispatch } = useApp();
   const insets = useSafeAreaInsets();
-  const [step, setStep] = useState(0); // 0=name, 1=age, 2=cycle
+
+  // Web starts at step -1 (email), native starts at 0
+  const [step, setStep] = useState(IS_WEB ? -1 : 0);
+  const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [lastPeriod, setLastPeriod] = useState('');
   const [cycleLength, setCycleLength] = useState('28');
 
+  function validateEmail(e) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  }
+
   async function finish() {
+    if (step === -1) {
+      if (!email.trim() || !validateEmail(email.trim())) {
+        Alert.alert('', 'Please enter a valid email address');
+        return;
+      }
+      setStep(0); return;
+    }
     if (step === 0 && !name.trim()) {
       Alert.alert('', lang === 'ta' ? 'பெயரை உள்ளிடவும்' : 'Please enter your name'); return;
     }
@@ -28,10 +44,9 @@ export default function ProfileSetupScreen({ route }) {
     }
     if (step < 2) { setStep(s => s + 1); return; }
 
-    const profile = { name: name.trim(), age: parseInt(age), lang };
+    const profile = { name: name.trim(), age: parseInt(age), lang, ...(IS_WEB && email ? { email: email.trim() } : {}) };
     const cl = parseInt(cycleLength, 10) || 28;
     const cycleData = { lastPeriodStart: lastPeriod || null, cycleLength: cl, periodDates: [] };
-    const cycleInfo = lastPeriod ? computeCycleInfo(lastPeriod, cl) : null;
 
     await saveProfile(profile);
     await saveCycleData(cycleData);
@@ -43,7 +58,29 @@ export default function ProfileSetupScreen({ route }) {
     dispatch({ type: 'SET_ONBOARDED' });
   }
 
-  const steps = [
+  const emailStep = {
+    emoji: '✉️',
+    title: 'Sign in with your email',
+    content: (
+      <View style={{ gap: 10 }}>
+        <TextInput
+          style={styles.input}
+          placeholder="you@example.com"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoFocus
+          placeholderTextColor={Colors.textMuted}
+        />
+        <Text style={styles.skipNote}>
+          Your email stays on your device. We don't send any emails.
+        </Text>
+      </View>
+    ),
+  };
+
+  const mainSteps = [
     {
       emoji: '💗',
       title: t('whatsYourName', lang),
@@ -56,7 +93,7 @@ export default function ProfileSetupScreen({ route }) {
           autoFocus
           placeholderTextColor={Colors.textMuted}
         />
-      )
+      ),
     },
     {
       emoji: '🌸',
@@ -71,7 +108,7 @@ export default function ProfileSetupScreen({ route }) {
           autoFocus
           placeholderTextColor={Colors.textMuted}
         />
-      )
+      ),
     },
     {
       emoji: '📅',
@@ -99,11 +136,15 @@ export default function ProfileSetupScreen({ route }) {
             {lang === 'ta' ? 'நீங்கள் இதை பின்னர் Track tab-இல் சேர்க்கலாம்' : 'You can add this later in the Track tab'}
           </Text>
         </View>
-      )
-    }
+      ),
+    },
   ];
 
-  const current = steps[step];
+  const allSteps = IS_WEB ? [emailStep, ...mainSteps] : mainSteps;
+  const displayStep = IS_WEB ? step + 1 : step; // index into allSteps
+  const current = allSteps[displayStep] || allSteps[0];
+  const totalDots = allSteps.length;
+  const dotIndex = IS_WEB ? step + 1 : step;
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -111,8 +152,8 @@ export default function ProfileSetupScreen({ route }) {
         <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 32, paddingBottom: insets.bottom + 24 }]}>
           {/* Progress dots */}
           <View style={styles.progressDots}>
-            {steps.map((_, i) => (
-              <View key={i} style={[styles.dot, i === step && styles.dotActive, i < step && styles.dotDone]} />
+            {allSteps.map((_, i) => (
+              <View key={i} style={[styles.dot, i === dotIndex && styles.dotActive, i < dotIndex && styles.dotDone]} />
             ))}
           </View>
 
@@ -124,7 +165,7 @@ export default function ProfileSetupScreen({ route }) {
           </View>
 
           <View style={styles.btnRow}>
-            {step > 0 && (
+            {step > (IS_WEB ? -1 : 0) && (
               <Pressable onPress={() => setStep(s => s - 1)} style={styles.backBtn}>
                 <MaterialCommunityIcons name="arrow-left" size={20} color={Colors.teal} />
                 <Text style={styles.backBtnText}>{t('back', lang)}</Text>
@@ -133,9 +174,9 @@ export default function ProfileSetupScreen({ route }) {
             <Pressable onPress={finish} style={{ flex: 1 }}>
               <LinearGradient colors={Gradients.primary} style={styles.nextBtn}>
                 <Text style={styles.nextBtnText}>
-                  {step < steps.length - 1 ? t('next', lang) : t('done', lang)}
+                  {step < 2 ? t('next', lang) : t('done', lang)}
                 </Text>
-                <MaterialCommunityIcons name={step < steps.length - 1 ? 'arrow-right' : 'check'} size={20} color={Colors.white} />
+                <MaterialCommunityIcons name={step < 2 ? 'arrow-right' : 'check'} size={20} color={Colors.white} />
               </LinearGradient>
             </Pressable>
           </View>

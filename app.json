@@ -22,6 +22,17 @@
       },
       "package": "in.smf.dearakka"
     },
+    "platforms": ["ios", "android", "web"],
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png",
+      "name": "Dear Akka",
+      "shortName": "Dear Akka",
+      "description": "Your personal women's health companion by Sundaram Medical Foundation",
+      "themeColor": "#0D9488",
+      "backgroundColor": "#FFF0F5"
+    },
     "plugins": [
       [
         "expo-notifications",
