@@ -8,7 +8,7 @@ import AppNavigator from './src/navigation';
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#0F2441' }}>
       <SafeAreaProvider>
         <StatusBar style="light" />
         <AppProvider>
