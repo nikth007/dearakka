@@ -40,30 +40,30 @@ const PHASE_INSIGHT = {
   },
 };
 
-const AKKA_GREETINGS = {
+const GREETINGS = {
   morning: {
-    en: ['Good morning, akka 🌿', 'Rise gently, akka 🌅', 'A new day for you, akka 🌱'],
-    ta: ['காலை வணக்கம், அக்கா 🌿', 'மெதுவாக எழுங்கள், அக்கா 🌅'],
+    en: ['Good morning 🌿', 'Rise gently today 🌅', 'A fresh day begins 🌱'],
+    ta: ['காலை வணக்கம் 🌿', 'நல்ல காலை 🌅'],
   },
   afternoon: {
-    en: ['How is your afternoon, akka? 🌤', 'Checking in with you, akka 🫶', 'Midday with you, akka 🌸'],
-    ta: ['மதியம் எப்படி இருக்கிறீர்கள், அக்கா? 🌤'],
+    en: ['Good afternoon 🌤', 'Checking in with you 🫶', 'How is your day going? 🌸'],
+    ta: ['மதிய வணக்கம் 🌤'],
   },
   evening: {
-    en: ['Good evening, akka 🌙', 'Winding down with you, akka ✨', 'Evening check-in, akka 💛'],
-    ta: ['மாலை வணக்கம், அக்கா 🌙', 'நல்ல இரவு வாழ்த்துக்கள், அக்கா ✨'],
+    en: ['Good evening 🌙', 'Winding down? ✨', 'Evening check-in 💛'],
+    ta: ['மாலை வணக்கம் 🌙', 'நல்ல இரவு ✨'],
   },
 };
 
 const AFFIRMATIONS = {
   en: [
-    "Your rhythm knows the way. Trust it, akka. 💛",
+    "Your rhythm knows the way. Trust it. 💛",
     "Every cycle is a chance to know yourself better. 🌿",
     "You are not behind your schedule — you are on your rhythm. 🌸",
-    "Rest is not laziness. It is how your body heals, akka. 💛",
+    "Rest is not laziness. It is how your body heals. 💛",
   ],
   ta: [
-    "உங்கள் தாளம் வழி அறியும். நம்புங்கள், அக்கா. 💛",
+    "உங்கள் தாளம் வழி அறியும். நம்புங்கள். 💛",
     "ஒவ்வொரு சுழற்சியும் உங்களை அறியும் வாய்ப்பு. 🌿",
   ],
 };
@@ -79,7 +79,7 @@ function pick(arr) { return arr[Math.floor(Date.now() / 86400000) % arr.length];
 
 export default function HomeScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const { cycleData, dailyLogs, lang } = useApp();
+  const { cycleData, dailyLogs, lang, user } = useApp();
   const l = lang || 'en';
 
   const cycleDay = currentCycleDay(cycleData.lastPeriodStart);
@@ -93,8 +93,9 @@ export default function HomeScreen({ navigation }) {
 
   const insight = (PHASE_INSIGHT[phase] || PHASE_INSIGHT.none)[l] || PHASE_INSIGHT[phase]?.en || PHASE_INSIGHT.none.en;
   const tod = timeOfDay();
-  const greetArr = (AKKA_GREETINGS[tod] || AKKA_GREETINGS.morning)[l] || AKKA_GREETINGS[tod]?.en || AKKA_GREETINGS.morning.en;
-  const greeting = pick(greetArr);
+  const greetArr = (GREETINGS[tod] || GREETINGS.morning)[l] || GREETINGS[tod]?.en || GREETINGS.morning.en;
+  const greetBase = pick(greetArr);
+  const greeting = user?.name ? greetBase.replace(/[🌿🌅🌱🌤🫶🌸🌙✨💛]/u, '').trim() + `, ${user.name} ` + greetBase.match(/[🌿🌅🌱🌤🫶🌸🌙✨💛]/u)?.[0] : greetBase;
   const affirmation = pick((AFFIRMATIONS[l] || AFFIRMATIONS.en));
 
   // Week-ahead days

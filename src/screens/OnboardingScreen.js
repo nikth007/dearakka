@@ -17,17 +17,17 @@ const SLIDES = [
   {
     phase: 'follicular',
     emoji: '🌿',
-    title: 'Meet Akka',
-    titleTa: 'அக்காவை சந்தியுங்கள்',
-    body: 'Dear Akka is your personal health companion — warm, private, and built for you by Sundaram Medical Foundation.',
-    bodyTa: 'Dear Akka உங்கள் தனிப்பட்ட ஆரோக்கிய தோழி — Sundaram Medical Foundation கட்டமைத்தது.',
+    title: 'Dear Akka',
+    titleTa: 'Dear Akka',
+    body: 'Your personal women\'s health companion — warm, private, and built for you by Sundaram Medical Foundation.',
+    bodyTa: 'உங்கள் தனிப்பட்ட மகளிர் ஆரோக்கிய தோழி — Sundaram Medical Foundation கட்டமைத்தது.',
   },
   {
     phase: 'menstrual',
     emoji: '🌸',
     title: 'Your cycle, your data',
     titleTa: 'உங்கள் சுழற்சி, உங்கள் தரவு',
-    body: 'Track your period, mood, symptoms and energy. Everything stays on your device — Akka never shares your data.',
+    body: 'Track your period, mood, symptoms and energy. Everything stays on your device — Dear Akka never shares your data.',
     bodyTa: 'மாதவிடாய், மனநிலை, அறிகுறிகளை பதிவு செய்யுங்கள். எல்லாம் உங்கள் சாதனத்திலேயே இருக்கும்.',
   },
   {
@@ -35,8 +35,8 @@ const SLIDES = [
     emoji: '✨',
     title: 'Personalised predictions',
     titleTa: 'தனிப்பயனாக்கப்பட்ட கணிப்புகள்',
-    body: 'The more you log, the better Akka knows your rhythm. No two cycles are the same — Akka learns YOUR pattern.',
-    bodyTa: 'நீங்கள் எவ்வளவு பதிவு செய்கிறீர்களோ, அவ்வளவு Akka உங்கள் தாளத்தை அறியும்.',
+    body: 'The more you log, the more Dear Akka learns your rhythm. No two cycles are the same — it learns YOUR pattern.',
+    bodyTa: 'நீங்கள் எவ்வளவு பதிவு செய்கிறீர்களோ, அவ்வளவு Dear Akka உங்கள் தாளத்தை அறியும்.',
   },
 ];
 
@@ -109,10 +109,10 @@ export default function OnboardingScreen() {
         <View style={styles.slideContainer}>
           <Akka phase="follicular" size={80} />
           <Text style={[T.h2, { textAlign: 'center', marginTop: 20, marginBottom: 8 }]}>
-            {l === 'ta' ? 'உங்கள் பெயர் என்ன, அக்கா?' : "What's your name, akka?"}
+            {l === 'ta' ? 'உங்கள் பெயர் என்ன?' : "What's your name?"}
           </Text>
           <Text style={[T.bodySmall, { textAlign: 'center', color: C.textSecondary, marginBottom: 24 }]}>
-            {l === 'ta' ? 'Akka உங்களை இதன்படி அழைப்பார்' : 'Akka will call you by this name'}
+            {l === 'ta' ? 'Dear Akka உங்களை இப்பெயரில் வரவேற்கும்' : 'Dear Akka will greet you by this name'}
           </Text>
           <TextInput
             value={name}

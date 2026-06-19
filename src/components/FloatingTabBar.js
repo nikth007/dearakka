@@ -12,7 +12,7 @@ export default function FloatingTabBar({ state, descriptors, navigation, phase }
   const ICONS = {
     Home:    { label: 'Home',   icon: '⌂' },
     Track:   { label: 'Track',  icon: '◎' },
-    Chat:    { label: 'Akka',   icon: null },  // uses photo
+    Chat:    { label: 'Guide',  icon: null },  // uses photo
     Learn:   { label: 'Learn',  icon: '◈' },
     Care:    { label: 'Care',   icon: '♡' },
   };

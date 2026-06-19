@@ -189,11 +189,11 @@ export default function CareScreen({ navigation }) {
   const tip = DAILY_TIPS[todayNum % DAILY_TIPS.length];
 
   const warmLines = {
-    menstrual: 'Rest deeply today, akka 🌙',
-    follicular: 'New energy is blooming for you, akka 🌱',
-    ovulation: "You\'re radiant right now, akka ✨",
-    luteal: 'Be gentle with yourself today, akka 🤍',
-    none: 'Here for you today, akka 💛',
+    menstrual: 'Rest deeply today 🌙',
+    follicular: 'New energy is blooming for you 🌱',
+    ovulation: "You're radiant right now ✨",
+    luteal: 'Be gentle with yourself today 🤍',
+    none: 'Here for you today 💛',
   };
 
   return (
@@ -245,7 +245,7 @@ export default function CareScreen({ navigation }) {
         </TouchableOpacity>
       </View>
       {examDone && (
-        <Text style={styles.examConfirm}>Done this month — well done, akka 💗</Text>
+        <Text style={styles.examConfirm}>Done this month — well done! 💗</Text>
       )}
 
       {/* Akka's Tip */}

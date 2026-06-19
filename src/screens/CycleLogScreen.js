@@ -90,7 +90,7 @@ export default function CycleLogScreen({ navigation }) {
             <Text style={[T.bodySmall, { fontStyle: 'italic', color: C.textSecondary }]}>
               {l === 'ta'
                 ? 'ஒவ்வொரு சுழற்சியும் என்னை உங்களை அறிய உதவுகிறது, அக்கா 💛'
-                : 'Every cycle helps me know you better, akka 💛'}
+                : 'Every cycle helps me understand your rhythm better 💛'}
             </Text>
           </View>
 
