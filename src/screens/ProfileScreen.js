@@ -13,6 +13,7 @@ import {
   StyleSheet,
   TextInput,
   Alert,
+  Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -53,20 +54,28 @@ export default function ProfileScreen({ navigation }) {
   }, [cycleLength, saveCycleData]);
 
   const handleSignOut = useCallback(() => {
-    Alert.alert(
-      lang === 'ta' ? 'வெளியேறுகிறீர்களா?' : 'Sign out?',
-      lang === 'ta'
-        ? 'உங்கள் சுழற்சி தரவு மற்றும் பதிவுகள் நீக்கப்படாது.'
-        : 'Your cycle data and logs will not be deleted.',
-      [
-        { text: lang === 'ta' ? 'ரத்து' : 'Cancel', style: 'cancel' },
-        {
-          text: lang === 'ta' ? 'வெளியேறு' : 'Sign Out',
-          style: 'destructive',
-          onPress: signOut,
-        },
-      ]
-    );
+    const title = lang === 'ta' ? 'வெளியேறுகிறீர்களா?' : 'Sign out?';
+    const body = lang === 'ta'
+      ? 'உங்கள் சுழற்சி தரவு மற்றும் பதிவுகள் நீக்கப்படாது.'
+      : 'Your cycle data and logs will not be deleted.';
+
+    // Alert.alert is a no-op on react-native-web, so confirm in the browser.
+    if (Platform.OS === 'web') {
+      // eslint-disable-next-line no-alert
+      if (typeof window !== 'undefined' && window.confirm(`${title}\n\n${body}`)) {
+        signOut();
+      }
+      return;
+    }
+
+    Alert.alert(title, body, [
+      { text: lang === 'ta' ? 'ரத்து' : 'Cancel', style: 'cancel' },
+      {
+        text: lang === 'ta' ? 'வெளியேறு' : 'Sign Out',
+        style: 'destructive',
+        onPress: signOut,
+      },
+    ]);
   }, [lang, signOut]);
 
   return (
@@ -75,6 +84,17 @@ export default function ProfileScreen({ navigation }) {
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 100 }]}
       showsVerticalScrollIndicator={false}
     >
+      {/* Back button */}
+      <TouchableOpacity
+        style={styles.backBtn}
+        onPress={() => (navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Main'))}
+        activeOpacity={0.7}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
+        <Ionicons name="chevron-back" size={22} color={C.textPrimary} />
+        <Text style={styles.backText}>{lang === 'ta' ? 'பின்' : 'Back'}</Text>
+      </TouchableOpacity>
+
       {/* Profile hero */}
       <View style={styles.hero}>
         <View style={[styles.avatarWrap, { borderColor: pc.accent }]}>
@@ -164,7 +184,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
           <TouchableOpacity
             style={[styles.smallBtn, { borderColor: pc.mid }]}
-            onPress={() => navigation.navigate('TrackScreen')}
+            onPress={() => navigation.navigate('Main', { screen: 'Track' })}
             activeOpacity={0.8}
           >
             <Text style={[styles.smallBtnText, { color: pc.accent }]}>
@@ -273,9 +293,24 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     gap: 10,
   },
+  backBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    alignSelf: 'flex-start',
+    paddingVertical: 6,
+    paddingRight: 12,
+    marginLeft: -4,
+  },
+  backText: {
+    fontFamily: 'Inter',
+    fontSize: 15,
+    fontWeight: '500',
+    color: C.textPrimary,
+  },
   hero: {
     alignItems: 'center',
-    paddingVertical: 24,
+    paddingVertical: 12,
     gap: 10,
   },
   avatarWrap: {

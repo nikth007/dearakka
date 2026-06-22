@@ -210,7 +210,13 @@ export default function CareScreen({ navigation }) {
         </View>
         <View style={styles.headerRight}>
           <MiniPetal phase={phase} size={26} />
-          <Akka phase={phase} size={44} />
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Profile')}
+            activeOpacity={0.8}
+            accessibilityLabel="Open profile and settings"
+          >
+            <Akka phase={phase} size={44} />
+          </TouchableOpacity>
         </View>
       </View>
 

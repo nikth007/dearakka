@@ -131,7 +131,13 @@ export default function HomeScreen({ navigation }) {
 
           {/* ── Greeting strip ─────────────────────────────── */}
           <View style={styles.greetingRow}>
-            <Akka phase={phase} size={48} showPetal />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Profile')}
+              activeOpacity={0.8}
+              accessibilityLabel="Open profile and settings"
+            >
+              <Akka phase={phase} size={48} showPetal />
+            </TouchableOpacity>
             <View style={{ flex: 1, marginLeft: 12 }}>
               <Text style={T.h4}>{greeting}</Text>
               <Text style={[T.bodySmall, { marginTop: 2, fontStyle: 'italic', color: pc.accent }]}>
