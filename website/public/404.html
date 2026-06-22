@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dear Akka</title>
+    <!--
+      SPA fallback for static hosts (e.g. GitHub Pages) that serve 404.html
+      for unknown paths. Redirects back into the app, preserving the route as
+      a query param that main.jsx-less index can restore. For Vercel/Netlify,
+      vercel.json / _redirects handle this and 404.html is unused.
+    -->
+    <script>
+      (function () {
+        var base = '/';
+        var path = window.location.pathname;
+        sessionStorage.setItem('da_redirect', path + window.location.search + window.location.hash);
+        window.location.replace(base);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
