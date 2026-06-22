@@ -9,9 +9,12 @@
         var p = window.location.pathname;
         var siteBase = '/dearakka/site/';
         if (p.indexOf(siteBase) === 0) {
+          // Deep link into the marketing site: preserve the route and bounce
+          // to the site index, which restores it from sessionStorage.
           sessionStorage.setItem('da_redirect', p + window.location.search + window.location.hash);
           window.location.replace(siteBase);
         } else {
+          // Any other unknown path: load the app at its root.
           window.location.replace('/dearakka/');
         }
       })();
