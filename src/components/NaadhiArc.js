@@ -12,6 +12,7 @@ import React, { useEffect, useRef, useMemo } from 'react';
 import { View, Animated, Easing } from 'react-native';
 import Svg, {
   Path, Circle, Ellipse, G, Defs, RadialGradient, Stop, ClipPath, Rect,
+  Text as SvgText,
 } from 'react-native-svg';
 import { C } from '../theme/colors';
 
@@ -300,7 +301,7 @@ export default function NaadhiArc({
             <G key={ph.key} x={ph.x} y={ph.y}>
               <BotComp color={color} size={ph.key === 'ovulation' ? 32 : 26} />
               {showLabels && (
-                <Svg.Text
+                <SvgText
                   x={0} y={ph.key === 'ovulation' ? 24 : 20}
                   fontSize={8}
                   fill={color}
@@ -309,7 +310,7 @@ export default function NaadhiArc({
                   opacity={0.7}
                 >
                   {ph.key.charAt(0).toUpperCase() + ph.key.slice(1)}
-                </Svg.Text>
+                </SvgText>
               )}
             </G>
           );
@@ -324,7 +325,7 @@ export default function NaadhiArc({
               >
                 <BotComp color={color} size={ph.key === 'ovulation' ? 32 : 26} />
                 {showLabels && (
-                  <Svg.Text
+                  <SvgText
                     x={0} y={ph.key === 'ovulation' ? 24 : 20}
                     fontSize={8}
                     fill={color}
@@ -334,7 +335,7 @@ export default function NaadhiArc({
                     fontWeight="600"
                   >
                     {ph.key.charAt(0).toUpperCase() + ph.key.slice(1)}
-                  </Svg.Text>
+                  </SvgText>
                 )}
               </AnimatedG>
             );
