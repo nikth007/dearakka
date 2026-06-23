@@ -20,7 +20,7 @@ import { C } from '../theme/colors';
 // ViewBox 375 × 200. The arc is a cubic Bézier: two curves joined at midpoint.
 // Control points are tuned for a natural, vine-like sweep.
 const VW = 375;
-const VH = 200;
+const VH = 240;
 const ARC = `M 18 162 C 75 82, 145 178, 188 124 C 232 70, 302 160, 357 108`;
 
 // Phase positions on the arc (x, y, and t 0-1 for pulse position)
@@ -270,7 +270,7 @@ export default function NaadhiArc({
         <Path
           d={ARC}
           stroke={C.dividerMid}
-          strokeWidth={2}
+          strokeWidth={2.5}
           fill="none"
           strokeLinecap="round"
           strokeDasharray="4 8"
@@ -278,10 +278,10 @@ export default function NaadhiArc({
         <Path
           d={ARC}
           stroke={currentPhaseColor}
-          strokeWidth={3.5}
+          strokeWidth={4.5}
           fill="none"
           strokeLinecap="round"
-          opacity={0.35}
+          opacity={0.38}
         />
 
         {/* Phase botanicals */}
@@ -299,15 +299,15 @@ export default function NaadhiArc({
 
           const node = (
             <G key={ph.key} x={ph.x} y={ph.y}>
-              <BotComp color={color} size={ph.key === 'ovulation' ? 32 : 26} />
+              <BotComp color={color} size={ph.key === 'ovulation' ? 40 : 32} />
               {showLabels && (
                 <SvgText
-                  x={0} y={ph.key === 'ovulation' ? 24 : 20}
-                  fontSize={8}
+                  x={0} y={ph.key === 'ovulation' ? 30 : 26}
+                  fontSize={10}
                   fill={color}
                   textAnchor="middle"
                   fontFamily="Inter"
-                  opacity={0.7}
+                  opacity={0.75}
                 >
                   {ph.key.charAt(0).toUpperCase() + ph.key.slice(1)}
                 </SvgText>
@@ -323,15 +323,15 @@ export default function NaadhiArc({
                 scale={breathScale}
                 originX={ph.x} originY={ph.y}
               >
-                <BotComp color={color} size={ph.key === 'ovulation' ? 32 : 26} />
+                <BotComp color={color} size={ph.key === 'ovulation' ? 40 : 32} />
                 {showLabels && (
                   <SvgText
-                    x={0} y={ph.key === 'ovulation' ? 24 : 20}
-                    fontSize={8}
+                    x={0} y={ph.key === 'ovulation' ? 30 : 26}
+                    fontSize={10}
                     fill={color}
                     textAnchor="middle"
                     fontFamily="Inter"
-                    opacity={0.9}
+                    opacity={0.95}
                     fontWeight="600"
                   >
                     {ph.key.charAt(0).toUpperCase() + ph.key.slice(1)}

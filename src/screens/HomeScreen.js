@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity, StyleSheet,
-  Animated, Easing, Dimensions,
+  Animated, Easing, Dimensions, Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -14,7 +14,7 @@ import NaadhiArc, { MiniPetal } from '../components/NaadhiArc';
 import Akka from '../components/Akka';
 
 const { width: SW } = Dimensions.get('window');
-const ARC_W = Math.min(SW, 430);
+const ARC_W = Platform.OS === 'web' ? 480 : Math.min(SW, 430);
 
 // Phase-aware content
 const PHASE_INSIGHT = {
@@ -271,8 +271,8 @@ const styles = StyleSheet.create({
   arcCard: {
     backgroundColor: C.bgMid,
     borderRadius: 24,
-    paddingVertical: 16,
-    paddingHorizontal: 4,
+    paddingVertical: 20,
+    paddingHorizontal: 0,
     marginBottom: 16,
     alignItems: 'center',
     overflow: 'hidden',
