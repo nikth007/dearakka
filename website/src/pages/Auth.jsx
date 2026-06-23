@@ -6,30 +6,14 @@ import Logo, { LogoMark } from '../components/Logo';
 import PhoneMockup from '../components/PhoneMockup';
 import { useLang } from '../content/i18n';
 import { ShieldIcon, CheckIcon, ArrowIcon } from '../components/icons/Icons';
+import { useAuth } from '../context/AuthContext';
 
 const T = '#0d9488', NAVY = '#1e3a5f';
-const APP_URL = 'https://nikth007.github.io/dearakka/';
-
-// ── Backend hookup point ───────────────────────────────────────────────
-// Wire these to the Neon/Postgres backend when available. For now they are
-// clearly-marked stubs that validate input and route into the app.
-// Expected backend: POST /api/auth/signup { email, password, name }
-//                   POST /api/auth/login  { email, password }
-async function submitAuth({ mode, email, password, name }) {
-  // TODO(backend): replace with real fetch to Neon-backed auth endpoint.
-  // const res = await fetch(`/api/auth/${mode === 'signup' ? 'signup' : 'login'}`, {
-  //   method: 'POST', headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({ email, password, name }),
-  // });
-  // if (!res.ok) throw new Error((await res.json()).message || 'Something went wrong');
-  // return res.json();
-  await new Promise((r) => setTimeout(r, 700)); // simulate latency
-  return { ok: true, stub: true };
-}
 
 export default function Auth({ mode: initialMode = 'login' }) {
   const { t } = useLang();
   const navigate = useNavigate();
+  const { signup, signin } = useAuth();
   const [mode, setMode] = useState(initialMode);
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [status, setStatus] = useState({ loading: false, error: '', note: '' });
@@ -45,14 +29,12 @@ export default function Auth({ mode: initialMode = 'login' }) {
       return;
     }
     try {
-      const r = await submitAuth({ mode, ...form });
-      if (r.stub) {
-        // No live backend yet — take her into the app, which works offline & on-device.
-        setStatus({ loading: false, error: '', note: t('Taking you to Dear Akka…', 'உங்களை Dear Akka-விற்கு அழைத்துச் செல்கிறோம்…') });
-        setTimeout(() => { window.location.href = APP_URL; }, 900);
+      if (isSignup) {
+        await signup({ email: form.email, password: form.password, name: form.name });
       } else {
-        window.location.href = APP_URL;
+        await signin({ email: form.email, password: form.password });
       }
+      navigate('/app/dashboard');
     } catch (err) {
       setStatus({ loading: false, error: err.message, note: '' });
     }
@@ -107,9 +89,9 @@ export default function Auth({ mode: initialMode = 'login' }) {
             <span style={{ flex: 1, height: 1, background: '#e8edf3' }} /> {t('or', 'அல்லது')} <span style={{ flex: 1, height: 1, background: '#e8edf3' }} />
           </div>
 
-          <a href={APP_URL} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ width: '100%' }}>
+          <Link to="/" className="btn btn-ghost" style={{ width: '100%' }}>
             {t('Continue without an account', 'கணக்கு இல்லாமல் தொடரவும்')}
-          </a>
+          </Link>
           <p className="muted center" style={{ fontSize: 13, marginTop: 10 }}>
             {t('Dear Akka works fully offline — an account just lets you sync later.', 'Dear Akka முழுமையாக ஆஃப்லைனில் வேலை செய்கிறது.')}
           </p>
